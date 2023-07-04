@@ -1,5 +1,4 @@
 import Footer from '@/components/Footer';
-import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import { userLoginUsingPOST } from '@/services/api-back/userController';
 import {
   GithubOutlined,
@@ -11,7 +10,6 @@ import {
 import {
   LoginForm,
   ProFormCaptcha,
-  ProFormCheckbox,
   ProFormText,
 } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
@@ -56,8 +54,8 @@ const LoginMessage: React.FC<{
   );
 };
 const Login: React.FC = () => {
-  const [userLoginState] = useState<API.LoginResult>({});
-  const [type, setType] = useState<string>('account');
+  const [ userLoginState ] = useState<API.LoginResult>({});
+  const [ type, setType ] = useState<string>('account');
   const { setInitialState } = useModel('@@initialState');
 
   const containerClassName = useEmotionCss(() => {
@@ -94,6 +92,7 @@ const Login: React.FC = () => {
       message.error(defaultLoginFailureMessage);
     }
   };
+
   const { status, type: loginType } = userLoginState;
 
   return (
@@ -115,8 +114,8 @@ const Login: React.FC = () => {
             maxWidth: '75vw',
           }}
           logo={<img alt="logo" src="/logo.svg" />}
-          title="API 接口开放平台"
-          subTitle={'Ant Design 是西湖区最具影响力的 Web 设计规范'}
+          title="Cool接口开放平台"
+          subTitle={'基于 Ant Design Pro 框架的接口开放平台'}
           initialValues={{
             autoLogin: true,
           }}
@@ -134,10 +133,10 @@ const Login: React.FC = () => {
                 key: 'account',
                 label: '账户密码登录',
               },
-              {
-                key: 'mobile',
-                label: '手机号登录',
-              },
+              // {
+              //   key: 'mobile',
+              //   label: '手机号登录',
+              // },
             ]}
           />
 
@@ -152,11 +151,11 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <UserOutlined/>,
                 }}
-                placeholder={'用户名: admin or user'}
+                placeholder={'请输入账户：'}
                 rules={[
                   {
                     required: true,
-                    message: '用户名是必填项！',
+                    message: '账户是必填项！',
                   },
                 ]}
               />
@@ -166,7 +165,7 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <LockOutlined/>,
                 }}
-                placeholder={'密码: ant.design'}
+                placeholder={'请输入密码：'}
                 rules={[
                   {
                     required: true,
@@ -177,13 +176,13 @@ const Login: React.FC = () => {
             </>
           )}
 
-          {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
+          {/* {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
           {type === 'mobile' && (
             <>
               <ProFormText
                 fieldProps={{
                   size: 'large',
-                  prefix: <MobileOutlined />,
+                  prefix: <MobileOutlined className={'prefixIcon'}/>,
                 }}
                 name="mobile"
                 placeholder={'请输入手机号！'}
@@ -201,7 +200,7 @@ const Login: React.FC = () => {
               <ProFormCaptcha
                 fieldProps={{
                   size: 'large',
-                  prefix: <LockOutlined />,
+                  prefix: <LockOutlined className={'prefixIcon'}/>,
                 }}
                 captchaProps={{
                   size: 'large',
@@ -213,37 +212,44 @@ const Login: React.FC = () => {
                   }
                   return '获取验证码';
                 }}
-                name="captcha"
+                name="code"
+                // 手机号的 name，onGetCaptcha 会注入这个值
+                phoneName="mobile"
                 rules={[
                   {
                     required: true,
                     message: '验证码是必填项！',
                   },
                 ]}
-                onGetCaptcha={async (phone) => {
-                  const result = await getFakeCaptcha({
-                    phone,
-                  });
-                  if (!result) {
-                    return;
+                onGetCaptcha={async (mobile) => {
+                  //获取验证成功后才会进行倒计时
+                  try{
+                    const result = await getPhoneCaptcha(mobile);
+                    if (!result) {
+                      return;
+                    }
+                    message.success(result.data);
+                  }catch(e){
                   }
-                  message.success('获取验证码成功！验证码为：1234');
                 }}
               />
             </>
-          )}
-          <div style={{ marginBottom: 24 }} >
-            <ProFormCheckbox noStyle name="autoLogin">
-              自动登录
-            </ProFormCheckbox>
+          )} */}
 
-            <Link style={{ float: 'right', }} to={{pathname: '/user/register'}}>
-              新用户注册
+          <div style={{ marginBottom: 24 }} >
+            {/* <ProFormCheckbox noStyle name="autoLogin">
+              自动登录
+            </ProFormCheckbox> */}
+            <Link style={{ float: 'left', marginBottom: 10}} to={{pathname: '/user/register'}}>
+              注册账号
             </Link>
+            <a style={{ float: 'right' }} >
+              忘记密码 ？
+            </a>
           </div>
         </LoginForm>
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
 };

@@ -77,8 +77,8 @@ const Login: React.FC = () => {
             maxWidth: '75vw',
           }}
           logo={<img alt="logo" src="/logo.svg" />}
-          title="API接口开放平台"
-          subTitle={'多样化API接口，丝滑的体验'}
+          title="Cool接口开放平台"
+          subTitle={'基于 Ant Design Pro 框架的接口开放平台'}
           submitter={{
             searchConfig: {
               submitText: '注册'
@@ -152,21 +152,11 @@ const Login: React.FC = () => {
               />
             </>
           )}
-
-          <div
-            style={{
-              marginBottom: 24,
-            }}
-          >
+          <div style={{ marginBottom: 24, }}>
             <Link to={{pathname: '/user/login'}}>
               返回登录
             </Link>
-            <a
-              style={{
-                float: 'right',
-              }}
-            >            
-            </a>
+            <a style={{ float: 'right', }}/>
           </div>
         </LoginForm>
       </div>
